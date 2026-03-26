@@ -4,11 +4,11 @@ import (
 	"log"
 
 	tea "charm.land/bubbletea/v2"
-	"github.com/SiVy1/Killjoy/cli"
+	ui "github.com/SiVy1/Killjoy/internal/ui"
 )
 
 func main() {
-	m := cli.NewModel()
+	m := ui.NewModel()
 	p := tea.NewProgram(m)
 
 	_, err := p.Run()
