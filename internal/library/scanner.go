@@ -33,7 +33,7 @@ func scanFolders(folders []string) ([]core.Track, error) {
 			}
 			metadata, err := readMetadata(path)
 			if err != nil {
-				return err
+				metadata = fallbackMetadata(path)
 			}
 			id := core.TrackID(path)
 
