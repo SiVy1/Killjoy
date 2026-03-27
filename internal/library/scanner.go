@@ -27,21 +27,24 @@ func scanFolders(folders []string) ([]core.Track, error) {
 			if d.IsDir() {
 				return nil
 			}
-
 			ext := strings.ToLower(filepath.Ext(path))
 			if _, ok := supportedExt[ext]; !ok {
 				return nil
 			}
-
-			title := strings.TrimSuffix(filepath.Base(path), ext)
+			metadata, err := readMetadata(path)
+			if err != nil {
+				return err
+			}
 			id := core.TrackID(path)
 
 			out = append(out, core.Track{
-				ID:     id,
-				Source: core.SourceLocal,
-				Path:   path,
-				Title:  title,
-				Artist: "Unknown",
+				ID:          id,
+				Source:      core.SourceLocal,
+				Path:        path,
+				Artist:      metadata.Artist,
+				Album:       metadata.Album,
+				DurationSec: metadata.Duration,
+				Title:       metadata.Title,
 			})
 
 			return nil
