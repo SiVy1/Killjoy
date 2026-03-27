@@ -16,7 +16,24 @@ type Service struct {
 	mu         sync.RWMutex
 }
 
-func PlayTrack(track core.Track) error {
+func (s *Service) PlayTrack(track core.Track) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if err := s.backend.Load(track.Path); err != nil {
+		return err
+	}
+
+	if err := s.backend.Play(); err != nil {
+		return err
+	}
+
+	s.state.Status = StatusPlaying
+	s.state.Position = 0
+	s.state.Duration = track.DurationSec
+	s.current = track
+	s.state.TrackID = string(s.current.ID)
+
 	return nil
 }
 
