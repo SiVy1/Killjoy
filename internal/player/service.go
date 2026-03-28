@@ -37,14 +37,49 @@ func (s *Service) PlayTrack(track core.Track) error {
 	return nil
 }
 
-func Pause() error {
+func (s *Service) Pause() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if err := s.backend.Pause(); err != nil {
+		return err
+	}
+
+	s.state.Status = StatusPaused
+	s.state.Position = s.backend.Position()
 	return nil
 }
 
-func Resume() error
+func (s *Service) Play() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
-func Next() error
+	if err := s.backend.Play(); err != nil {
+		return err
+	}
 
-func Prev() error
+	s.state.Status = StatusPlaying
+	s.state.Position = s.backend.Position()
+	return nil
+}
 
-func Seek(delta time.Duration) error
+func (s *Service) Next() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return nil
+}
+
+func (s *Service) Prev() error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return nil
+}
+
+func (s *Service) Seek(delta time.Duration) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	return nil
+}
